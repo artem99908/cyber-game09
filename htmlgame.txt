@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omega Protocol - Web App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .terminal {
+            background: #111827;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #ff007f;
+            text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
+        }
+        .story-text {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            min-height: 80px;
+        }
+        .btn {
+            background: transparent;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 12px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: #00ffcc;
+            color: #0b0f19;
+            box-shadow: 0 0 10px #00ffcc;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #374151;
+            padding-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal">
+        <h2>OMEGA PROTOCOL</h2>
+        <div class="stats">
+            <span>Энергия: <strong id="energy">100</strong> ⚡️</span>
+            <span>Кредиты: <strong id="credits">500</strong> 🪙</span>
+        </div>
+        
+        <div class="story-text" id="story">
+            Инициализация безопасного соединения... Обход файрвола корпорации NeuralNet завершен. Вы стоите перед главным шлюзом. Ваши действия?
+        </div>
+
+        <div id="choices">
+            <button class="btn" onclick="nextStep(1)">1. Взломать шлюз силой (Риск тревоги)</button>
+            <button class="btn" onclick="nextStep(2)">2. Использовать скрытый бэкдор инсайдера</button>
+        </div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let energy = 100;
+        let credits = 500;
+
+        function updateStats() {
+            document.getElementById('energy').innerText = energy;
+            document.getElementById('credits').innerText = credits;
+        }
+
+        function nextStep(option) {
+            let storyDiv = document.getElementById('story');
+            let choicesDiv = document.getElementById('choices');
+
+            if (option === 1) {
+                energy -= 20;
+                credits += 100;
+                storyDiv.innerText = "Шлюз взломан грубой силой! Система подняла тревогу, но вы успели выкачать 100 кредитов со счетов корпорации.";
+            } else {
+                energy -= 10;
+                credits += 250;
+                storyDiv.innerText = "Тихий взлом прошел успешно. Инсайдер поделился ключами доступа к хранилищу. Получено 250 кредитов!";
+            }
+            updateStats();
+
+            choicesDiv.innerHTML = `<button class="btn" onclick="resetGame()">Продолжить проникновение...</button>`;
+        }
+
+        function resetGame() {
+            let storyDiv = document.getElementById('story');
+            let choicesDiv = document.getElementById('choices');
+
+            storyDiv.innerText = "Вы на втором уровне безопасности. Корпоративные дроны патрулируют периметр. Ваши действия?";
+            choicesDiv.innerHTML = `
+                <button class="btn" onclick="nextStep(1)">1. Проскользнуть мимо патруля</button>
+                <button class="btn" onclick="nextStep(2)">2. Перегрузить сеть дронов</button>
+            `;
+        }
+    </script>
+</body>
+</html>
